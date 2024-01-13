@@ -23,7 +23,7 @@ CREATE TABLE "transfers" (
 );
 
 
--- 参照の制約
+-- -- 参照の制約
 ALTER TABLE "entries" ADD FOREIGN KEY ("account_id") REFERENCES "accounts" ("id");
 
 ALTER TABLE "transfers" ADD FOREIGN KEY ("from_account_id") REFERENCES "accounts" ("id");
