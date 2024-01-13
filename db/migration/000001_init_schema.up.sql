@@ -1,4 +1,5 @@
 CREATE TABLE "accounts" (
+  -- 自動 id 
   "id" bigserial PRIMARY KEY,
   "owner" varchar NOT NULL,
   "balance" bigint NOT NULL,
