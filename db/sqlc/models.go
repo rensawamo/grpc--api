@@ -16,6 +16,7 @@ type Account struct {
 	CreatedAt time.Time `json:"created_at"`
 }
 
+// 決済情報  from と toに分岐させる
 type Entry struct {
 	ID        int64 `json:"id"`
 	AccountID int64 `json:"account_id"`
