@@ -1,28 +1,26 @@
 package db
 
 import (
-	"context"
+	"database/sql"
 	"log"
 	"os"
 	"testing"
 
-	"github.com/jackc/pgx/v5/pgxpool"
-	"github.com/rensawamo/grpc-api/util"
+	_ "github.com/lib/pq" // postgresに接続するために必須
 )
 
-var testStore Store
+const (
+	dbDriver = "postgres"
+	dbSource = "postgresql://root:secret@localhost:5432/simple_bank?sslmode=disable"
+)
+
+var testQueries *Queries
 
 func TestMain(m *testing.M) {
-	config, err := util.LoadConfig("../..")
-	if err != nil {
-		log.Fatal("cannot load config:", err)
-	}
-
-	connPool, err := pgxpool.New(context.Background(), config.DBSource)
+	conn, err := sql.Open(dbDriver, dbSource)
 	if err != nil {
 		log.Fatal("cannot connect to db:", err)
 	}
-
-	testStore = NewStore(connPool)
-	os.Exit(m.Run())
+	testQueries = New(conn)
+	os.Exit(m.Run()) //テストの実行
 }
