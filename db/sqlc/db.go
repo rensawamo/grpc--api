@@ -9,7 +9,6 @@ import (
 	"database/sql"
 )
 
-// トランザクション関係がはいる
 type DBTX interface {
 	ExecContext(context.Context, string, ...interface{}) (sql.Result, error)
 	PrepareContext(context.Context, string) (*sql.Stmt, error)
