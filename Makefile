@@ -16,7 +16,7 @@ migratedown:
 sqlc:
 	sqlc generate
 
-# すべてのテストを実行しろって意味
+# すべてのテスト実行
 test:
 	go test -v -cover ./...
 
