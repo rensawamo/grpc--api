@@ -7,16 +7,11 @@ import (
 	"testing"
 
 	_ "github.com/lib/pq" // postgresに接続するために必須
-)
-
-const (
-	dbDriver = "postgres"
-	dbSource = "postgresql://root:secret@localhost:5432/simple_bank?sslmode=disable"
+	"github.com/rensawamo/grpc-api/util"
 )
 
 var testQueries *Queries
 var testDB *sql.DB
-
 
 // func TestMain(m *testing.M) {
 // 	conn, err := sql.Open(dbDriver, dbSource)
@@ -29,9 +24,12 @@ var testDB *sql.DB
 
 // トランザクション用
 func TestMain(m *testing.M) {
-	var err error
+	config, err := util.LoadConfig("../..")
+	if err != nil {
+		log.Fatal("cannot load config:", err)
+	}
 
-	testDB, err = sql.Open(dbDriver,dbSource)
+	testDB, err = sql.Open(config.DBDriver, config.DBSource)
 	if err != nil {
 		log.Fatal("cannot connect to db:", err)
 	}
