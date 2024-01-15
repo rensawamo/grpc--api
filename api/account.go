@@ -40,7 +40,7 @@ type getAccountRequest struct {
 	ID int64 `uri:"id" binding:"required,min=1"`
 }
 
- // idがヒットしたaccoutを返す関数
+// idがヒットしたaccoutを返す関数
 func (server *Server) getAccount(ctx *gin.Context) {
 	var req getAccountRequest
 	if err := ctx.ShouldBindUri(&req); err != nil {
@@ -82,3 +82,4 @@ func (server *Server) listAccounts(ctx *gin.Context) {
 	}
 	ctx.JSON(http.StatusOK, accounts)
 }
+
