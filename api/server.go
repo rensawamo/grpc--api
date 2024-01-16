@@ -16,7 +16,7 @@ func NewServer(store db.Store) *Server {
 	server := &Server{store: store}
 	router := gin.Default()
 
-	// 特定の条件を満たしているかの関数
+	// 特定の条件を満たしているか valideter  関数
 	if v, ok := binding.Validator.Engine().(*validator.Validate); ok {
 		v.RegisterValidation("currency", validCurrency) // currency で validCurrencyを登録
 	}
