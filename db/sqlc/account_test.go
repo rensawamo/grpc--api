@@ -17,9 +17,11 @@ func createRandomAccount(t *testing.T) Account {
 	// 	Currency: "USD",
 	// }
 
+	// 参照合わせ
+	user := createRandomUser(t)
 	// random関数でのテストに変更
 	arg := CreateAccountParams{
-		Owner:    util.RandomOwner(),
+		Owner:    user.Username,
 		Balance:  util.RandomMoney(),
 		Currency: util.RandomCurrency(),
 	}
