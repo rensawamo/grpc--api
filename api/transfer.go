@@ -13,25 +13,26 @@ type transferRequest struct {
 	FromAccountID int64  `json:"from_account_id" binding:"required,min=1"`
 	ToAccountID   int64  `json:"to_account_id" binding:"required,min=1"`
 	Amount        int64  `json:"amount" binding:"required,gt=0"`
-	Currency      string `json:"currency" binding:"required,oneof=USD EUR CAD"`
+	Currency      string `json:"currency" binding:"required,currency"`  // validationは bindingの条件分岐で活躍
 }
 
 //ctxの「出力」は、主にHTTPレスポンスとしてクライアントに返されるデータとして表される
 
-// "transfer": {
-// 	"id": 45,
-// 	"from_account_id": 2,
-// 	"to_account_id": 4,
-// 	"amount": 10,
-// 	"created_at": "2024-01-15T23:04:31.703966Z"
-// },
-// "from_account": {
-// 	"id": 2,
-// 	"owner": "burygb",
-// 	"balance": 224,
-// 	"currency": "EUR",
-// 	"created_at": "2024-01-13T09:10:43.2116Z"
-// },
+//	"transfer": {
+//		"id": 45,
+//		"from_account_id": 2,
+//		"to_account_id": 4,
+//		"amount": 10,
+//		"created_at": "2024-01-15T23:04:31.703966Z"
+//	},
+//
+//	"from_account": {
+//		"id": 2,
+//		"owner": "burygb",
+//		"balance": 224,
+//		"currency": "EUR",
+//		"created_at": "2024-01-13T09:10:43.2116Z"
+//	},
 func (server *Server) createTransfer(ctx *gin.Context) {
 	var req transferRequest
 	if err := ctx.ShouldBindJSON(&req); err != nil {
@@ -56,7 +57,6 @@ func (server *Server) createTransfer(ctx *gin.Context) {
 	}
 	ctx.JSON(http.StatusOK, result)
 }
-
 
 func (server *Server) validAccount(ctx *gin.Context, accountID int64, currency string) bool {
 	account, err := server.store.GetAccount(ctx, accountID)

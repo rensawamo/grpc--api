@@ -7,7 +7,7 @@ const (
 	CAD = "CAD"
 )
 
-// IsSupportedCurrency returns true if the currency is supported
+// 通貨がサポートされているかのバリデーション
 func IsSupportedCurrency(currency string) bool {
 	switch currency {
 	case USD, EUR, CAD:
