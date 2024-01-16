@@ -10,6 +10,8 @@ import (
 
 // クエリ関数 ＋ トランザクション関数
 // この インターフェイスから mock を作成する
+// make mock
+// queryに、user.sqlに追加したとき、 make sqlcをすると再度 mockを作り直さなければならない(mockの参照エラーが起きる)
 type Store interface {
 	Querier
 	TransferTx(ctx context.Context, arg TransferTxParams) (TransferTxResult, error)
