@@ -26,6 +26,8 @@ func TestGetAccountAPI(t *testing.T) {
 		buildStubs    func(store *mockdb.MockStore)
 		checkResponse func(t *testing.T, recoder *httptest.ResponseRecorder)
 	}{
+		//エラーパターンテスト
+		//バリエーションによって account.goのテストカバー率が変わってくる
 		{
 			name:      "OK",
 			accountID: account.ID,
@@ -58,7 +60,6 @@ func TestGetAccountAPI(t *testing.T) {
 
 	for i := range testCases {
 		tc := testCases[i]
-
 		t.Run(tc.name, func(t *testing.T) {
 			ctrl := gomock.NewController(t) // これは mockgenから作成される関数
 			defer ctrl.Finish()
@@ -69,14 +70,13 @@ func TestGetAccountAPI(t *testing.T) {
 			// 	GetAccount(gomock.Any(), gomock.Eq(account.ID)).
 			// 	Times(1).
 			// 	Return(account, nil)
-
 			// スタート
+
 			server := NewServer(store)
 			recorder := httptest.NewRecorder()
 			url := fmt.Sprintf("/accounts/%d", account.ID)
 			request, err := http.NewRequest(http.MethodGet, url, nil)
 			require.NoError(t, err)
-
 			server.router.ServeHTTP(recorder, request)
 			tc.checkResponse(t, recorder)
 		})
@@ -92,6 +92,7 @@ func randomAccount() db.Account {
 	}
 }
 
+// IDが認証された時 用のテスト
 func requireBodyMatchAccount(t *testing.T, body *bytes.Buffer, account db.Account) {
 	data, err := io.ReadAll(body)
 	require.NoError(t, err)
