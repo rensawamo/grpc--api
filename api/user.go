@@ -49,6 +49,7 @@ func (server *Server) createUser(ctx *gin.Context) {
 		return
 	}
 
+	// ここを文字にすると resのpassでないから err (testcode)
 	hashedPassword, err := util.HashPassword(req.Password)
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, errorResponse(err))
@@ -63,19 +64,14 @@ func (server *Server) createUser(ctx *gin.Context) {
 	}
 
 	user, err := server.store.CreateUser(ctx, arg) // by auto created interface
-	// if err != nil {
-	// 	if pqErr, ok := err.(*pq.Error); ok {
-	// 		switch pqErr.Code.Name() {
-	// 		case "unique_violation": // ステータスのコード分岐とかも可能そう
-	// 			// 第一引数は httpのレスポンスコード
-	// 			// Forbidenは403番指定
-	// 			ctx.JSON(http.StatusForbidden, errorResponse(err))
-	// 			return
-	// 		}
-	// 	}
-	// 	ctx.JSON(http.StatusInternalServerError, errorResponse(err))
-	// 	return
-	// }
+	if err != nil {
+		if db.ErrorCode(err) == db.UniqueViolation {
+			ctx.JSON(http.StatusForbidden, errorResponse(err))
+			return
+		}
+		ctx.JSON(http.StatusInternalServerError, errorResponse(err))
+		return
+	}
 	// ctx.JSON(http.StatusOK, user)
 
 	rsp := createUserResponse{
